@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="FinanceAccountJmix">
+        <createTable tableName="BANK_ACCOUNT">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_BANK_ACCOUNT"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="CLIENT_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="FinanceAccountJmix">
+        <createTable tableName="CLIENT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CLIENT"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="FinanceAccountJmix">
+        <createTable tableName="TRANSACTION">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TRANSACTION"/>
+            </column>
+            <column name="FROM_ACC_ID" type="INT"/>
+            <column name="TO_ACC_ID" type="INT"/>
+            <column name="CREATE_DATE" type="DATETIME"/>
+            <column name="TRANSFER_AMOUNT" type="DECIMAL(19)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="FinanceAccountJmix">
+        <createTable tableName="TRANSACTION_TO_TYPE">
+            <column name="TRANSACTION_ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TRANSACTION_TO_TYPE"/>
+            </column>
+            <column name="TYPE_ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TRANSACTION_TO_TYPE"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="FinanceAccountJmix">
+        <createTable tableName="TYPE">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TYPE"/>
+            </column>
+            <column name="CLIENT_ID" type="UUID"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="FinanceAccountJmix">
+        <addColumn tableName="USER_">
+            <column name="DTYPE" type="VARCHAR(31)"/>
+        </addColumn>
+
+        <update tableName="USER_">
+            <column name="DTYPE" value="User"/>
+            <where>DTYPE is null</where>
+        </update>
+    </changeSet>
+    <changeSet id="7" author="FinanceAccountJmix">
+        <createIndex indexName="IDX_TRANSACTION__FROM_ACC" tableName="TRANSACTION">
+            <column name="FROM_ACC_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="FROM_ACC_ID" baseTableName="TRANSACTION"
+                                 constraintName="FK_TRANSACTION_ON_FROM_ACC" referencedColumnNames="ID"
+                                 referencedTableName="BANK_ACCOUNT"/>
+    </changeSet>
+    <changeSet id="8" author="FinanceAccountJmix">
+        <createIndex indexName="IDX_TRANSACTION__TO_ACC" tableName="TRANSACTION">
+            <column name="TO_ACC_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="TO_ACC_ID" baseTableName="TRANSACTION"
+                                 constraintName="FK_TRANSACTION_ON_TO_ACC" referencedColumnNames="ID"
+                                 referencedTableName="BANK_ACCOUNT"/>
+    </changeSet>
+    <changeSet id="9" author="FinanceAccountJmix">
+        <createIndex indexName="IDX_TYPE_CLIENT" tableName="TYPE">
+            <column name="CLIENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CLIENT_ID" baseTableName="TYPE" constraintName="FK_TYPE_ON_CLIENT"
+                                 referencedColumnNames="ID" referencedTableName="CLIENT"/>
+    </changeSet>
+    <changeSet id="10" author="FinanceAccountJmix">
+        <addForeignKeyConstraint baseColumnNames="CLIENT_ID" baseTableName="BANK_ACCOUNT"
+                                 constraintName="FK_BANK_ACCOUNT_ON_CLIENT" referencedColumnNames="ID"
+                                 referencedTableName="CLIENT"/>
+    </changeSet>
+    <changeSet id="11" author="FinanceAccountJmix">
+        <addForeignKeyConstraint baseColumnNames="ID" baseTableName="CLIENT" constraintName="FK_CLIENT_ON_ID"
+                                 referencedColumnNames="ID" referencedTableName="USER_"/>
+    </changeSet>
+    <changeSet id="12" author="FinanceAccountJmix">
+        <addForeignKeyConstraint baseColumnNames="TRANSACTION_ID" baseTableName="TRANSACTION_TO_TYPE"
+                                 constraintName="FK_TRATOTYP_ON_TRANSACTION" referencedColumnNames="ID"
+                                 referencedTableName="TRANSACTION"/>
+    </changeSet>
+    <changeSet id="13" author="FinanceAccountJmix">
+        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="TRANSACTION_TO_TYPE"
+                                 constraintName="FK_TRATOTYP_ON_TRANSACTION_TYPE" referencedColumnNames="ID"
+                                 referencedTableName="TYPE"/>
+    </changeSet>
+</databaseChangeLog>
