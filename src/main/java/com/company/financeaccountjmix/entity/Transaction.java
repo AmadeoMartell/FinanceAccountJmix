@@ -3,6 +3,9 @@ package com.company.financeaccountjmix.entity;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -30,9 +33,11 @@ public class Transaction {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_DATE")
+    @NotNull
     private Date createDate;
 
-    @Column(name = "TRANSFER_AMOUNT", precision = 19)
+    @Column(name = "TRANSFER_AMOUNT", precision = 19, nullable = false)
+    @Positive(message = "Amount should be positive!")
     private BigInteger transferAmount;
 
     @JoinTable(name = "TRANSACTION_TO_TYPE",
@@ -87,6 +92,11 @@ public class Transaction {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @AssertTrue(message = "Invalid transaction direction")
+    public boolean isValidDirection() {
+        return fromAccount != null || toAccount != null;
     }
 
 }

@@ -3,6 +3,13 @@
 
     <menu id="application" title="msg://com.company.financeaccountjmix/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.financeaccountjmix.view.user/UserListView.title"/>
+        <item view="BankAccount.list"
+              title="msg://com.company.financeaccountjmix.view.bankaccount/bankAccountListView.title"/>
+        <item view="Transaction.list"
+              title="msg://com.company.financeaccountjmix.view.transaction/transactionListView.title"/>
+        <item view="TransactionType.list"
+              title="msg://com.company.financeaccountjmix.view.transactiontype/transactionTypeListView.title"/>
+        <item view="finance_Client.list" title="msg://com.company.financeaccountjmix.view.client/clientListView.title"/>
     </menu>
 
 </menu-config>

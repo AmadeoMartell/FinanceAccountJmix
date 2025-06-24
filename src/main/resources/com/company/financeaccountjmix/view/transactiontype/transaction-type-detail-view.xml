@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://transactionTypeDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="transactionTypeDc"
+                  class="com.company.financeaccountjmix.entity.TransactionType">
+            <fetchPlan extends="_base">
+                <property name="client" fetch="JOIN">
+                    <property name="username"/>
+                    <property name="firstName"/>
+                    <property name="lastName"/>
+                </property>
+                <property name="transactions" fetch="JOIN">
+                    <property name="fromAccount" fetchPlan="_base"/>
+                    <property name="toAccount" fetchPlan="_base"/>
+                </property>
+            </fetchPlan>
+            <loader id="transactionTypeDl"/>
+            <collection id="transactionsDc" property="transactions"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="transactionTypeDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <entityPicker id="clientField" property="client">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <textField id="nameField" property="name"/>
+        </formLayout>
+        <h4 text="msg://com.company.financeaccountjmix.entity/TransactionType.transactions"/>
+        <hbox id="transactionsButtonsPanel" classNames="buttons-panel">
+            <button action="transactionsDataGrid.addAction"/>
+            <button action="transactionsDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="transactionsDataGrid" dataContainer="transactionsDc" width="100%" minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="fromAccount"/>
+                <column property="toAccount"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

@@ -4,6 +4,8 @@
     import io.jmix.core.metamodel.annotation.InstanceName;
     import io.jmix.core.metamodel.annotation.JmixEntity;
     import jakarta.persistence.*;
+    import jakarta.validation.constraints.DecimalMin;
+    import jakarta.validation.constraints.NotNull;
 
     import java.math.BigInteger;
 
@@ -16,14 +18,18 @@
         @Id
         private Integer id;
 
+        @NotNull
+        @DecimalMin(value = "0", inclusive = true)
         @Column(name = "AMOUNT")
         private BigInteger amount;
 
         @InstanceName
-        @Column(name = "NAME")
+        @NotNull
+        @Column(name = "NAME", nullable = false)
         private String name;
 
-        @JoinColumn(name = "CLIENT_ID")
+        @NotNull
+        @JoinColumn(name = "CLIENT_ID", nullable = false)
         @ManyToOne(fetch = FetchType.LAZY)
         private Client client;
 

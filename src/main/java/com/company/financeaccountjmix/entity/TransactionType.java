@@ -4,6 +4,7 @@ import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -18,12 +19,14 @@ public class TransactionType {
     @Id
     private Integer id;
 
-    @JoinColumn(name = "CLIENT_ID")
+    @NotNull
+    @JoinColumn(name = "CLIENT_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
     @InstanceName
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
+    @NotNull
     private String name;
 
     @JoinTable(name = "TRANSACTION_TO_TYPE",

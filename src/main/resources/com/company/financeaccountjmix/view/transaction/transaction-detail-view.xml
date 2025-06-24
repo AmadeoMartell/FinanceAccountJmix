@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://transactionDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="transactionDc"
+                  class="com.company.financeaccountjmix.entity.Transaction">
+            <fetchPlan extends="_base">
+                <property name="fromAccount" fetchPlan="_base">
+                    <property name="client" fetch="JOIN">
+                        <property name="username"/>
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                    </property>
+                </property>
+                <property name="toAccount" fetch="JOIN">
+                    <property name="amount"/>
+                    <property name="name"/>
+                    <property name="client" fetch="JOIN">
+                        <property name="username"/>
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                    </property>
+                </property>
+                <property name="types" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="transactionDl"/>
+            <collection id="typesDc" property="types"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="transactionDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <entityPicker id="fromAccountField" property="fromAccount">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="toAccountField" property="toAccount">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <dateTimePicker id="createDateField" property="createDate"/>
+            <textField id="transferAmountField" property="transferAmount"/>
+        </formLayout>
+        <h4 text="msg://com.company.financeaccountjmix.entity/Transaction.types"/>
+        <hbox id="typesButtonsPanel" classNames="buttons-panel">
+            <button action="typesDataGrid.addAction"/>
+            <button action="typesDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="typesDataGrid" dataContainer="typesDc" width="100%" minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="name"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>
