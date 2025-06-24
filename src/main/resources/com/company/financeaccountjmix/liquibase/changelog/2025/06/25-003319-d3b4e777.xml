@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="FinanceAccountJmix">
+        <addNotNullConstraint columnDataType="UUID" columnName="CLIENT_ID" tableName="BANK_ACCOUNT" validate="true"/>
+    </changeSet>
+    <changeSet id="2" author="FinanceAccountJmix">
+        <addNotNullConstraint columnDataType="UUID" columnName="CLIENT_ID" tableName="TYPE" validate="true"/>
+    </changeSet>
+    <changeSet id="3" author="FinanceAccountJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="NAME" tableName="BANK_ACCOUNT" validate="true"/>
+    </changeSet>
+    <changeSet id="4" author="FinanceAccountJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="NAME" tableName="TYPE" validate="true"/>
+    </changeSet>
+    <changeSet id="5" author="FinanceAccountJmix">
+        <addNotNullConstraint columnDataType="DECIMAL(19)" columnName="TRANSFER_AMOUNT" tableName="TRANSACTION"
+                              validate="true"/>
+    </changeSet>
+</databaseChangeLog>

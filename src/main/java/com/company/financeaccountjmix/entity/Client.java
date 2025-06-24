@@ -1,5 +1,6 @@
 package com.company.financeaccountjmix.entity;
 
+import io.jmix.core.annotation.Secret;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 
@@ -8,8 +9,8 @@ import java.util.List;
 @JmixEntity
 @Entity(name = "finance_Client")
 @Table(name = "CLIENT")
-@Inheritance(strategy = InheritanceType.JOINED)
-@PrimaryKeyJoinColumn(name = "ID")
+@DiscriminatorValue("Client")
+@PrimaryKeyJoinColumn(name = "ID", referencedColumnName = "ID")
 public class Client extends User {
 
     @OneToMany(mappedBy = "client")

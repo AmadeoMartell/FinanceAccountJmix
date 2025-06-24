@@ -20,6 +20,9 @@ import java.util.UUID;
 @Table(name = "USER_", indexes = {
         @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true)
 })
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("User")
 public class User implements JmixUserDetails, HasTimeZone {
 
     @Id
@@ -34,8 +37,6 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "USERNAME", nullable = false)
     private String username;
 
-    @Secret
-    @SystemLevel
     @Column(name = "PASSWORD")
     private String password;
 

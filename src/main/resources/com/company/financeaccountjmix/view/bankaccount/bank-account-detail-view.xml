@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       title="msg://bankAccountDetailView.title"
       focusComponent="form">
@@ -19,7 +19,7 @@
         <dataLoadCoordinator auto="true"/>
     </facets>
     <actions>
-        <action id="saveAction" type="detail_saveClose"/>
+        <action id="saveAction"  type="detail_saveClose"/>
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
@@ -28,18 +28,20 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
+
             <textField id="amountField" property="amount"/>
-            <textField id="nameField" property="name"/>
+            <textField id="nameField"   property="name"/>
+
             <entityPicker id="clientField" property="client">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
-                    <action id="entityClearAction" type="entity_clear"/>
+                    <action id="entityClearAction"  type="entity_clear"/>
                 </actions>
             </entityPicker>
         </formLayout>
-        <hbox id="detailActions">
+        <hbox id="detailActions" spacing="true">
             <button id="saveAndCloseButton" action="saveAction"/>
-            <button id="closeButton" action="closeAction"/>
+            <button id="closeButton"        action="closeAction"/>
         </hbox>
     </layout>
 </view>

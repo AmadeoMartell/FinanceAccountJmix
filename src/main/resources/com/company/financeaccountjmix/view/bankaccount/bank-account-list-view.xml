@@ -1,70 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://bankAccountListView.title"
+      title="Мои счета"
       focusComponent="bankAccountsDataGrid">
     <data>
         <collection id="bankAccountsDc"
-                    class="com.company.financeaccountjmix.entity.BankAccount">
-            <fetchPlan extends="_base">
-                <property name="client" fetch="JOIN">
-                    <property name="username"/>
-                    <property name="firstName"/>
-                    <property name="lastName"/>
-                </property>
-            </fetchPlan>
-            <loader id="bankAccountsDl" readOnly="true">
-                <query>
-                    <![CDATA[
-                       select e
-                         from BankAccount e
-                        where e.client.id = :userId
-                    ]]>
-                </query>
-            </loader>
-        </collection>
+                    class="com.company.financeaccountjmix.entity.BankAccount"/>
     </data>
-    <facets>
-        <dataLoadCoordinator auto="true"/>
-        <urlQueryParameters>
-            <genericFilter component="genericFilter"/>
-            <pagination component="pagination"/>
-        </urlQueryParameters>
-    </facets>
-    <actions>
-        <action id="selectAction" type="lookup_select"/>
-        <action id="discardAction" type="lookup_discard"/>
-    </actions>
     <layout>
-        <genericFilter id="genericFilter"
-                       dataLoader="bankAccountsDl">
-            <properties include=".*"/>
-        </genericFilter>
-        <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="bankAccountsDataGrid.createAction"/>
-            <button id="editButton" action="bankAccountsDataGrid.editAction"/>
-            <button id="removeButton" action="bankAccountsDataGrid.removeAction"/>
-            <simplePagination id="pagination" dataLoader="bankAccountsDl"/>
+        <hbox spacing="true" margin="true">
+            <button action="bankAccountsDataGrid.createAction"/>
+            <button action="bankAccountsDataGrid.editAction"/>
+            <button action="bankAccountsDataGrid.removeAction" />
         </hbox>
+
         <dataGrid id="bankAccountsDataGrid"
-                  width="100%"
-                  minHeight="20em"
                   dataContainer="bankAccountsDc"
-                  columnReorderingAllowed="true">
+                  height="100%">
             <actions>
                 <action id="createAction" type="list_create"/>
-                <action id="editAction" type="list_edit"/>
+                <action id="editAction"   type="list_edit"/>
                 <action id="removeAction" type="list_remove"/>
             </actions>
-            <columns resizable="true">
-                <column property="amount"/>
+            <columns>
                 <column property="name"/>
-                <column property="client"/>
+                <column property="amount"/>
             </columns>
         </dataGrid>
-        <hbox id="lookupActions" visible="false">
-            <button id="selectButton" action="selectAction"/>
-            <button id="discardButton" action="discardAction"/>
-        </hbox>
     </layout>
 </view>

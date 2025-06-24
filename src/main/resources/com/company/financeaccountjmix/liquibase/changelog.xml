@@ -13,4 +13,14 @@
 
     <includeAll path="/com/company/financeaccountjmix/liquibase/changelog"/>
 
+    <changeSet id="2025-06-25-fix-dtype-user" author="you">
+        <sql>
+            UPDATE USER_
+            SET DTYPE = 'User'
+            WHERE DTYPE IS NULL OR DTYPE NOT IN ('User','Client');
+            UPDATE USER_
+            SET DTYPE = 'Client'
+            WHERE ID IN (SELECT ID FROM CLIENT);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

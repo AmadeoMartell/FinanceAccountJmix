@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
       title="msg://clientListView.title"
       focusComponent="clientsDataGrid">
     <data>
@@ -9,31 +8,39 @@
             <fetchPlan extends="_base"/>
             <loader id="clientsDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from finance_Client e]]>
+                    <![CDATA[select e from finance_Client e order by e.username]]>
                 </query>
             </loader>
         </collection>
     </data>
+    <actions>
+        <action id="selectAction"  type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
     <facets>
         <dataLoadCoordinator auto="true"/>
         <urlQueryParameters>
             <genericFilter component="genericFilter"/>
-            <pagination component="pagination"/>
+            <pagination    component="pagination"/>
         </urlQueryParameters>
     </facets>
-    <actions>
-        <action id="selectAction" type="lookup_select"/>
-        <action id="discardAction" type="lookup_discard"/>
-    </actions>
     <layout>
         <genericFilter id="genericFilter"
                        dataLoader="clientsDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="clientsDataGrid.createAction"/>
-            <button id="editButton" action="clientsDataGrid.editAction"/>
-            <button id="removeButton" action="clientsDataGrid.removeAction"/>
+            <button          id="createButton"               action="clientsDataGrid.createAction"/>
+            <button          id="editButton"                 action="clientsDataGrid.editAction"/>
+            <button          id="removeButton"               action="clientsDataGrid.removeAction"/>
+            <button          id="showRoleAssignmentsButton"  action="clientsDataGrid.showRoleAssignmentsAction"/>
+            <dropdownButton  id="additionalButton" text="msg://additionalMenu" icon="COG">
+                <items>
+                    <actionItem id="changePasswordItem"        ref="clientsDataGrid.changePasswordAction"/>
+                    <actionItem id="resetPasswordItem"         ref="clientsDataGrid.resetPasswordAction"/>
+                    <actionItem id="showUserSubstitutionsItem" ref="clientsDataGrid.showUserSubstitutionsAction"/>
+                </items>
+            </dropdownButton>
             <simplePagination id="pagination" dataLoader="clientsDl"/>
         </hbox>
         <dataGrid id="clientsDataGrid"
@@ -42,21 +49,25 @@
                   dataContainer="clientsDc"
                   columnReorderingAllowed="true">
             <actions>
-                <action id="createAction" type="list_create"/>
-                <action id="editAction" type="list_edit"/>
-                <action id="removeAction" type="list_remove"/>
+                <action id="createAction"                 type="list_create"/>
+                <action id="editAction"                   type="list_edit"/>
+                <action id="removeAction"                 type="list_remove"/>
+                <action id="showRoleAssignmentsAction"    type="sec_showRoleAssignments"/>
+                <action id="changePasswordAction"         type="sec_changePassword"/>
+                <action id="resetPasswordAction"          type="sec_resetPassword"/>
+                <action id="showUserSubstitutionsAction"  type="sec_showUserSubstitutions"/>
             </actions>
             <columns resizable="true">
                 <column property="username"/>
                 <column property="firstName"/>
                 <column property="lastName"/>
                 <column property="email"/>
-                <column property="active"/>
                 <column property="timeZoneId"/>
+                <column property="active"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">
-            <button id="selectButton" action="selectAction"/>
+            <button id="selectButton"  action="selectAction"/>
             <button id="discardButton" action="discardAction"/>
         </hbox>
     </layout>
