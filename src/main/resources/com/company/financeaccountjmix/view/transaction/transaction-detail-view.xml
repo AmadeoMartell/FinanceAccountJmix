@@ -68,8 +68,8 @@
         </dataGrid>
 
         <hbox spacing="true">
-            <button id="saveButton"/>
-            <button id="cancelButton"/>
+            <button id="saveButton" text="msg://com.company.financeaccountjmix.entity/Transaction.save"/>
+            <button id="cancelButton" text="msg://com.company.financeaccountjmix.entity/Transaction.cancel"/>
         </hbox>
     </layout>
 </view>
