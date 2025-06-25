@@ -1,85 +1,31 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
       title="msg://transactionListView.title"
       focusComponent="transactionsDataGrid">
     <data>
         <collection id="transactionsDc"
-                    class="com.company.financeaccountjmix.entity.Transaction">
-            <fetchPlan extends="_base">
-                <property name="fromAccount" fetchPlan="_base">
-                    <property name="client" fetch="JOIN">
-                        <property name="username"/>
-                        <property name="firstName"/>
-                        <property name="lastName"/>
-                    </property>
-                </property>
-                <property name="toAccount" fetch="JOIN">
-                    <property name="amount"/>
-                    <property name="name"/>
-                    <property name="client" fetch="JOIN">
-                        <property name="username"/>
-                        <property name="firstName"/>
-                        <property name="lastName"/>
-                    </property>
-                </property>
-                <property name="types" fetchPlan="_base"/>
-            </fetchPlan>
-            <loader id="transactionsDl" readOnly="true">
-                <query>
-                    <![CDATA[
-                        select e
-                          from Transaction e
-                         where e.fromAccount.client.id = :userId
-                            or e.toAccount.client.id   = :userId
-                    ]]>
-                </query>
-
-            </loader>
-        </collection>
+                    class="com.company.financeaccountjmix.entity.Transaction"/>
     </data>
-    <facets>
-        <dataLoadCoordinator auto="true"/>
-        <urlQueryParameters>
-            <genericFilter component="genericFilter"/>
-            <pagination component="pagination"/>
-        </urlQueryParameters>
-    </facets>
-    <actions>
-        <action id="selectAction" type="lookup_select"/>
-        <action id="discardAction" type="lookup_discard"/>
-    </actions>
     <layout>
-        <genericFilter id="genericFilter"
-                       dataLoader="transactionsDl">
-            <properties include=".*"/>
-        </genericFilter>
-        <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="transactionsDataGrid.createAction"/>
-            <button id="editButton" action="transactionsDataGrid.editAction"/>
-            <button id="removeButton" action="transactionsDataGrid.removeAction"/>
-            <simplePagination id="pagination" dataLoader="transactionsDl"/>
+        <hbox spacing="true" margin="true">
+            <button action="transactionsDataGrid.createAction"/>
+            <button action="transactionsDataGrid.editAction"/>
+            <button action="transactionsDataGrid.removeAction" />
         </hbox>
         <dataGrid id="transactionsDataGrid"
-                  width="100%"
-                  minHeight="20em"
                   dataContainer="transactionsDc"
-                  columnReorderingAllowed="true">
+                  height="100%">
             <actions>
                 <action id="createAction" type="list_create"/>
-                <action id="editAction" type="list_edit"/>
+                <action id="editAction"   type="list_edit"/>
                 <action id="removeAction" type="list_remove"/>
             </actions>
-            <columns resizable="true">
+            <columns>
                 <column property="fromAccount"/>
                 <column property="toAccount"/>
                 <column property="createDate"/>
                 <column property="transferAmount"/>
             </columns>
         </dataGrid>
-        <hbox id="lookupActions" visible="false">
-            <button id="selectButton" action="selectAction"/>
-            <button id="discardButton" action="discardAction"/>
-        </hbox>
     </layout>
 </view>

@@ -27,10 +27,10 @@ public class TransactionService {
     private CurrentAuthentication currentAuth;
 
     @Transactional
-    public Transaction createTransaction(UUID fromId,
-                                         UUID toId,
+    public Transaction createTransaction(Integer fromId,
+                                         Integer toId,
                                          @Positive(message = "Amount must be >0") BigInteger amount,
-                                         List<UUID> typeIds) {
+                                         List<Integer> typeIds) {
         UUID uid = getCurrentUserId();
 
         BankAccount from = null, to = null;
@@ -71,6 +71,57 @@ public class TransactionService {
         }
 
         return tx;
+    }
+
+    public List<Transaction> getMyTransactions() {
+        UUID uid = getCurrentUserId();
+        return dataManager.load(Transaction.class)
+                .query("""
+                select distinct t
+                  from Transaction t
+             left join t.fromAccount fa
+             left join t.toAccount   ta
+                 where fa.client.id = :uid
+                    or ta.client.id = :uid
+              order by t.createDate desc
+            """)
+                .parameter("uid", uid)
+                .list();
+    }
+
+    @Transactional
+    public void processTransaction(Transaction tx) {
+        UUID uid = getCurrentUserId();
+        BigInteger amount = tx.getTransferAmount();
+
+        if (tx.getFromAccount() != null) {
+            checkOwnership(tx.getFromAccount().getClient().getId(), uid);
+        }
+        if (tx.getToAccount() != null) {
+            checkOwnership(tx.getToAccount().getClient().getId(), uid);
+        }
+
+        if (tx.getFromAccount() != null &&
+                tx.getFromAccount().getAmount().compareTo(amount) < 0) {
+            throw new IllegalArgumentException("No enough money on the account " + tx.getFromAccount().getName() + " to transfer " + amount);
+        }
+
+        if (tx.getFromAccount() != null) {
+            tx.getFromAccount().setAmount(
+                    tx.getFromAccount().getAmount().subtract(amount)
+            );
+            dataManager.save(tx.getFromAccount());
+        }
+        if (tx.getToAccount() != null) {
+            tx.getToAccount().setAmount(
+                    tx.getToAccount().getAmount().add(amount)
+            );
+            dataManager.save(tx.getToAccount());
+        }
+
+        if (tx.getCreateDate() == null) {
+            tx.setCreateDate(new Date());
+        }
     }
 
     private UUID getCurrentUserId() {

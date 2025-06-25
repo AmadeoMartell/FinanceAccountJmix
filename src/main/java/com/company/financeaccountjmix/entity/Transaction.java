@@ -33,7 +33,6 @@ public class Transaction {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_DATE")
-    @NotNull
     private Date createDate;
 
     @Column(name = "TRANSFER_AMOUNT", precision = 19, nullable = false)
